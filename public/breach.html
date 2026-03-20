@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Check if your password has appeared in known data breaches using the HaveIBeenPwned k-anonymity API." />
+  <link rel="canonical" href="https://password.mdothree.com/breach" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Breach Checker — mdothree" />
+  <meta property="og:description" content="Check if your password has appeared in known data breaches using the HaveIBeenPwned k-anonymity API." />
+  <meta property="og:url" content="https://password.mdothree.com/breach" />
+  <meta property="og:image" content="https://mdothree.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Breach Checker — mdothree" />
+  <meta name="twitter:description" content="Check if your password has appeared in known data breaches using the HaveIBeenPwned k-anonymity API." />
+  <title>Breach Checker — mdothree Password</title>
+  <meta name="stripe-config" content='{"publishableKey":"REPLACE_WITH_STRIPE_PUBLISHABLE_KEY","priceIdMonthly":"REPLACE_WITH_STRIPE_PRICE_ID_MONTHLY","priceIdYearly":"REPLACE_WITH_STRIPE_PRICE_ID_YEARLY","portalUrl":"https://billing.stripe.com/p/login/REPLACE"}'>
+  <meta name="firebase-config" content='{"apiKey":"REPLACE_WITH_API_KEY","authDomain":"REPLACE.firebaseapp.com","projectId":"REPLACE_WITH_PROJECT_ID","storageBucket":"REPLACE.appspot.com","messagingSenderId":"REPLACE","appId":"REPLACE_WITH_APP_ID"}'>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#10B981" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" />
+  <link rel="preconnect" href="https://js.stripe.com" />
+  <link rel="preconnect" href="https://hooks.stripe.com" />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="https://mdothree.com">m<span class="dot">.</span>3</a>
+    <nav class="tool-nav">
+      <a href="/">Generator</a>
+      <a href="/strength">Strength</a>
+      <a href="/passphrase">Passphrase</a>
+      <a href="/pin">PIN</a>
+      <a href="/breach" class="active">Breach Check</a>
+      <a href="https://mdothree.com/pro" class="pro-nav-link">★ Pro</a>
+    </nav>
+  </header>
+
+  <main class="tool-main">
+    <div class="tool-header">
+      <h1>Breach Checker</h1>
+      <p>Check if a password has appeared in known data breaches using the <strong>k-anonymity</strong> model. <strong>Pro feature.</strong></p>
+    </div>
+    <div class="tool-body">
+      <div class="info-banner">
+        🔒 <strong>Privacy first:</strong> Only the first 5 characters of your password's SHA-1 hash are sent to the HaveIBeenPwned API. Your actual password never leaves your device.
+      </div>
+      <div>
+        <label class="field-label" for="breachInput">Password to check</label>
+        <div class="input-with-action">
+          <input type="password" id="breachInput" class="input-field" placeholder="Enter password…" autocomplete="off" />
+          <button class="btn-ghost btn-icon-sm" id="toggleVis" aria-label="Toggle visibility">👁</button>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="btn-primary" id="checkBtn">Check Password</button>
+      </div>
+      <div class="output-panel" id="resultPanel" hidden>
+        <div id="breachResult" class="breach-result"></div>
+        <div id="breachDetail" class="breach-detail"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/pages/breach.js" type="module"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

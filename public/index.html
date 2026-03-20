@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="stripe-config" content='{"publishableKey":"REPLACE_WITH_STRIPE_PUBLISHABLE_KEY","priceIdMonthly":"REPLACE_WITH_STRIPE_PRICE_ID_MONTHLY","priceIdYearly":"REPLACE_WITH_STRIPE_PRICE_ID_YEARLY","portalUrl":"https://billing.stripe.com/p/login/REPLACE"}'>
+  <meta name="firebase-config" content='{"apiKey":"REPLACE_WITH_API_KEY","authDomain":"REPLACE.firebaseapp.com","projectId":"REPLACE_WITH_PROJECT_ID","storageBucket":"REPLACE.appspot.com","messagingSenderId":"REPLACE","appId":"REPLACE_WITH_APP_ID"}'>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Generate cryptographically secure passwords with custom length, character sets, and strength analysis." />
+  <link rel="canonical" href="https://password.mdothree.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Password Generator — mdothree" />
+  <meta property="og:description" content="Generate cryptographically secure passwords with custom length, character sets, and strength analysis." />
+  <meta property="og:url" content="https://password.mdothree.com/" />
+  <meta property="og:image" content="https://mdothree.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Password Generator — mdothree" />
+  <meta name="twitter:description" content="Generate cryptographically secure passwords with custom length, character sets, and strength analysis." />
+  <title>Password Generator — mdothree</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#10B981" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" />
+  <link rel="preconnect" href="https://js.stripe.com" />
+  <link rel="preconnect" href="https://hooks.stripe.com" />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="https://mdothree.com">m<span class="dot">.</span>3</a>
+    <nav class="tool-nav">
+      <a href="/" class="active">Generator</a>
+      <a href="/strength">Strength</a>
+      <a href="/passphrase">Passphrase</a>
+      <a href="/pin">PIN</a>
+      <a href="/breach">Breach Check</a>
+      <a href="https://mdothree.com/pro" class="pro-nav-link" style="margin-left:auto;background:linear-gradient(135deg,#10B981,#059669);color:#fff;border-radius:99px;padding:4px 12px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;text-decoration:none;white-space:nowrap">★ Pro</a>
+    </nav>
+  </header>
+
+  <main class="tool-main">
+    <div class="tool-header">
+      <h1>Password Generator</h1>
+      <p>Generate cryptographically secure passwords. Everything runs locally — your passwords never leave your device.</p>
+    </div>
+
+    <div class="tool-body">
+      <!-- Generated password display -->
+      <div class="password-display-wrap">
+        <div class="password-display" id="passwordDisplay">Click Generate</div>
+        <div class="pw-actions">
+          <button class="btn-icon" id="copyPwBtn" title="Copy password">⎘</button>
+          <button class="btn-icon" id="refreshBtn" title="Regenerate">↻</button>
+        </div>
+      </div>
+
+      <!-- Strength bar -->
+      <div class="strength-bar-wrap">
+        <div class="strength-bar-track">
+          <div class="strength-bar-fill" id="strengthBarFill"></div>
+        </div>
+        <span class="strength-label" id="strengthLabel">—</span>
+      </div>
+
+      <!-- Length -->
+      <div class="option-row">
+        <label class="field-label" for="pwLength">Length: <span id="pwLengthVal">20</span></label>
+        <input type="range" id="pwLength" min="4" max="128" value="20" class="slider" />
+      </div>
+
+      <!-- Character options -->
+      <div class="option-section">
+        <label class="field-label">Character Sets</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item">
+            <input type="checkbox" id="useUpper" checked /> Uppercase (A–Z)
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="useLower" checked /> Lowercase (a–z)
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="useDigits" checked /> Numbers (0–9)
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="useSymbols" checked /> Symbols (!@#…)
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="avoidAmbig" /> Avoid ambiguous (0, O, l, 1)
+          </label>
+        </div>
+      </div>
+
+      <!-- Custom symbols -->
+      <div class="option-row">
+        <label class="field-label" for="customSymbols">Custom symbols (optional)</label>
+        <input type="text" id="customSymbols" class="input-field" placeholder="e.g. !@#$%" value="!@#$%^&*()-_=+[]{}|;:,.<>?" />
+      </div>
+
+      <!-- Count -->
+      <div class="option-row">
+        <label class="field-label" for="pwCount">Generate</label>
+        <div style="display:flex;align-items:center;gap:10px">
+          <input type="number" id="pwCount" class="input-field" value="1" min="1" max="50" style="width:70px" / inputmode="numeric">
+          <span style="font-size:0.85rem;color:var(--text-secondary)">password(s)</span>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-primary" id="generateBtn">Generate</button>
+        <button class="btn-ghost" id="copyAllBtn">Copy All</button>
+      </div>
+
+      <!-- Multiple passwords list -->
+      <div id="multiPwPanel" class="output-panel hidden">
+        <label class="field-label">Generated Passwords</label>
+        <div id="multiPwList" class="pw-list"></div>
+      </div>
+
+      <!-- History -->
+      <div id="historyPanel" class="output-panel" style="margin-top:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <label class="field-label" style="margin:0">Recent Passwords</label>
+          <button class="btn-ghost" id="clearHistoryBtn" style="font-size:0.78rem;padding:4px 10px">Clear</button>
+        </div>
+        <div id="historyList" class="pw-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

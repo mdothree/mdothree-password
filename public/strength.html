@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Test your password strength in real time — entropy analysis, WCAG-style scoring, and improvement suggestions." />
+  <link rel="canonical" href="https://password.mdothree.com/strength" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Password Strength Meter — mdothree" />
+  <meta property="og:description" content="Test your password strength in real time — entropy analysis, WCAG-style scoring, and improvement suggestions." />
+  <meta property="og:url" content="https://password.mdothree.com/strength" />
+  <meta property="og:image" content="https://mdothree.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Password Strength Meter — mdothree" />
+  <meta name="twitter:description" content="Test your password strength in real time — entropy analysis, WCAG-style scoring, and improvement suggestions." />
+  <title>Password Strength — mdothree Password</title>
+  <meta name="stripe-config" content='{"publishableKey":"REPLACE_WITH_STRIPE_PUBLISHABLE_KEY","priceIdMonthly":"REPLACE_WITH_STRIPE_PRICE_ID_MONTHLY","priceIdYearly":"REPLACE_WITH_STRIPE_PRICE_ID_YEARLY","portalUrl":"https://billing.stripe.com/p/login/REPLACE"}'>
+  <meta name="firebase-config" content='{"apiKey":"REPLACE_WITH_API_KEY","authDomain":"REPLACE.firebaseapp.com","projectId":"REPLACE_WITH_PROJECT_ID","storageBucket":"REPLACE.appspot.com","messagingSenderId":"REPLACE","appId":"REPLACE_WITH_APP_ID"}'>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#10B981" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" />
+  <link rel="preconnect" href="https://js.stripe.com" />
+  <link rel="preconnect" href="https://hooks.stripe.com" />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="https://mdothree.com">m<span class="dot">.</span>3</a>
+    <nav class="tool-nav">
+      <a href="/">Generator</a>
+      <a href="/strength" class="active">Strength</a>
+      <a href="/passphrase">Passphrase</a>
+      <a href="/pin">PIN</a>
+      <a href="/breach">Breach Check</a>
+      <a href="https://mdothree.com/pro" class="pro-nav-link">★ Pro</a>
+    </nav>
+  </header>
+
+  <main class="tool-main">
+    <div class="tool-header">
+      <h1>Password Strength Meter</h1>
+      <p>Analyze any password in real time. Nothing you type is recorded or transmitted.</p>
+    </div>
+    <div class="tool-body">
+      <div>
+        <label class="field-label" for="testPw">Your Password</label>
+        <div class="input-with-action">
+          <input type="password" id="testPw" class="input-field" placeholder="Type to analyze…" autocomplete="off" />
+          <button class="btn-ghost btn-icon-sm" id="toggleVis" aria-label="Toggle visibility">👁</button>
+        </div>
+      </div>
+      <div class="strength-bar-wrap">
+        <div class="strength-bar-track">
+          <div class="strength-bar-fill" id="sFill"></div>
+        </div>
+        <span class="strength-label" id="sLabel">—</span>
+      </div>
+      <div class="output-panel" id="analysis" hidden>
+        <div class="analysis-grid">
+          <div>
+            <div class="field-label">Entropy</div>
+            <div id="entropy" class="analysis-value">—</div>
+          </div>
+          <div>
+            <div class="field-label">Level</div>
+            <div id="level" class="analysis-value">—</div>
+          </div>
+        </div>
+        <div class="field-label">Suggestions</div>
+        <ul id="feedback" class="feedback-list"></ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/pages/strength.js" type="module"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

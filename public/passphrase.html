@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Generate memorable passphrases from random words. Stronger than passwords, easier to remember." />
+  <link rel="canonical" href="https://password.mdothree.com/passphrase" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Passphrase Generator — mdothree" />
+  <meta property="og:description" content="Generate memorable passphrases from random words. Stronger than passwords, easier to remember." />
+  <meta property="og:url" content="https://password.mdothree.com/passphrase" />
+  <meta property="og:image" content="https://mdothree.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Passphrase Generator — mdothree" />
+  <meta name="twitter:description" content="Generate memorable passphrases from random words. Stronger than passwords, easier to remember." />
+  <title>Passphrase Generator — mdothree Password</title>
+  <meta name="stripe-config" content='{"publishableKey":"REPLACE_WITH_STRIPE_PUBLISHABLE_KEY","priceIdMonthly":"REPLACE_WITH_STRIPE_PRICE_ID_MONTHLY","priceIdYearly":"REPLACE_WITH_STRIPE_PRICE_ID_YEARLY","portalUrl":"https://billing.stripe.com/p/login/REPLACE"}'>
+  <meta name="firebase-config" content='{"apiKey":"REPLACE_WITH_API_KEY","authDomain":"REPLACE.firebaseapp.com","projectId":"REPLACE_WITH_PROJECT_ID","storageBucket":"REPLACE.appspot.com","messagingSenderId":"REPLACE","appId":"REPLACE_WITH_APP_ID"}'>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#10B981" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" />
+  <link rel="preconnect" href="https://js.stripe.com" />
+  <link rel="preconnect" href="https://hooks.stripe.com" />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="https://mdothree.com">m<span class="dot">.</span>3</a>
+    <nav class="tool-nav">
+      <a href="/">Generator</a>
+      <a href="/strength">Strength</a>
+      <a href="/passphrase" class="active">Passphrase</a>
+      <a href="/pin">PIN</a>
+      <a href="/breach">Breach Check</a>
+      <a href="https://mdothree.com/pro" class="pro-nav-link">★ Pro</a>
+    </nav>
+  </header>
+
+  <main class="tool-main">
+    <div class="tool-header">
+      <h1>Passphrase Generator</h1>
+      <p>Generate memorable yet secure passphrases from random words. <strong>Pro feature.</strong></p>
+    </div>
+    <div class="tool-body">
+      <div class="password-display-wrap">
+        <div class="password-display" id="phraseDisplay">Click Generate</div>
+        <div class="pw-actions">
+          <button class="btn-icon" id="copyPhraseBtn" title="Copy">⎘</button>
+          <button class="btn-icon" id="refreshPhraseBtn" title="Regenerate">↻</button>
+        </div>
+      </div>
+      <div id="entropyInfo" class="entropy-info"></div>
+      <div class="option-row">
+        <label class="field-label">Word count: <span id="wordCountVal">4</span></label>
+        <input type="range" id="wordCount" class="slider" min="2" max="8" value="4" />
+      </div>
+      <div class="option-row">
+        <label class="field-label" for="separator">Separator</label>
+        <input type="text" id="separator" class="input-field input-field--narrow" value="-" maxlength="3" />
+      </div>
+      <div class="option-section">
+        <label class="field-label">Options</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" id="capitalize" /> Capitalize words</label>
+          <label class="checkbox-item"><input type="checkbox" id="addNumber" /> Append number</label>
+          <label class="checkbox-item"><input type="checkbox" id="addSymbol" /> Append symbol</label>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="btn-primary" id="genPhraseBtn">Generate</button>
+        <button class="btn-ghost" id="copyPhraseBtn2">Copy</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/pages/passphrase.js" type="module"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
