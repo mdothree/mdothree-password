@@ -12,6 +12,7 @@ import {
 import { onAuthChange, ensureAnonymousUser } from './config/config.js';
 import { initSubscription, onSubscriptionChange } from './services/subscriptionService.js';
 import { proGate, lockElement, openUpgradeModal, handleStripeReturn, proBadge } from './services/paywallUI.js';
+import { firebaseConfig } from './config/firebase.js';
 
 initSubscription();
 handleStripeReturn();
