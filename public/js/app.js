@@ -72,10 +72,13 @@ async function generate() {
   const opts  = getOpts();
   const rawCount = Math.min(50, Math.max(1, parseInt(pwCountInput.value, 10) || 1));
   // Pro gate: bulk generation (>5 at once)
+  let count = rawCount;
   if (rawCount > 5 && !await proGate('password.bulk')) {
-    if (pwCountInput) pwCountInput.value = 5; return;
+    // Free plan: cap at 5 and say so, instead of silently resetting and generating nothing.
+    count = 5;
+    if (pwCountInput) pwCountInput.value = 5;
+    showToast('Free plan generates up to 5 at once. Generated 5. Upgrade to Pro for up to 50.', 'info', 4500);
   }
-  const count = rawCount;
   lastPasswords = generatePasswords(opts, count);
 
   const primary = lastPasswords[0];
@@ -117,20 +120,35 @@ function makePwItem(pw, showDelete = false, docId = null) {
   const colors = { 'very-weak':'#EF4444','weak':'#F97316','fair':'#F59E0B','strong':'#22C55E','very-strong':'#10B981' };
   const item = document.createElement('div');
   item.className = 'pw-item';
-  item.innerHTML = `
-    <span style="flex:1;word-break:break-all">${pw}</span>
-    <span class="pw-item-strength" title="${LEVEL_LABELS[level]}"></span>
-    ${showDelete && docId ? `<button data-id="${docId}" class="del-btn" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:0.75rem;padding:2px 6px;margin-left:4px" title="Delete">✕</button>` : ''}
-  `;
-  item.querySelector('.pw-item-strength').style.background = colors[level] || '#ccc';
-  item.querySelector('span:first-child').addEventListener('click', async () => {
-    await copyToClipboard(pw); showToast('Password copied!');
+  // Build with textContent: passwords contain <, >, & and must render verbatim
+  // (innerHTML swallowed "<a..." sequences, so the shown and copied values differed).
+  const text = document.createElement('span');
+  text.style.cssText = 'flex:1;word-break:break-all;cursor:pointer';
+  text.textContent = pw;
+  const dot = document.createElement('span');
+  dot.className = 'pw-item-strength';
+  dot.title = LEVEL_LABELS[level];
+  dot.style.background = colors[level] || '#ccc';
+  item.append(text, dot);
+  text.addEventListener('click', async () => {
+    const ok = await copyToClipboard(pw);
+    showToast(ok ? 'Password copied!' : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
   });
-  item.querySelector('.del-btn')?.addEventListener('click', async e => {
-    e.stopPropagation();
-    await deletePasswordFromHistory(docId);
-    await loadAndRenderHistory();
-  });
+  if (showDelete && docId) {
+    const del = document.createElement('button');
+    del.className = 'del-btn';
+    del.dataset.id = docId;
+    del.title = 'Delete';
+    del.setAttribute('aria-label', 'Delete from history');
+    del.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:0.75rem;padding:2px 6px;margin-left:4px';
+    del.textContent = '✕';
+    del.addEventListener('click', async e => {
+      e.stopPropagation();
+      await deletePasswordFromHistory(docId);
+      await loadAndRenderHistory();
+    });
+    item.append(del);
+  }
   return item;
 }
 
@@ -141,14 +159,14 @@ refreshBtn?.addEventListener('click', generate);
 copyPwBtn?.addEventListener('click', async () => {
   const pw = display.textContent;
   if (!pw || pw === 'Click Generate') return;
-  await copyToClipboard(pw);
-  showToast('Copied!');
+  const ok = await copyToClipboard(pw);
+  showToast(ok ? 'Copied!' : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
 });
 
 copyAllBtn?.addEventListener('click', async () => {
   if (!lastPasswords.length) return;
-  await copyToClipboard(lastPasswords.join('\n'));
-  showToast(`${lastPasswords.length} passwords copied!`);
+  const ok = await copyToClipboard(lastPasswords.join('\n'));
+  showToast(ok ? `${lastPasswords.length} passwords copied!` : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
 });
 
 clearHistBtn?.addEventListener('click', async () => {

@@ -52,8 +52,8 @@
       <div class="password-display-wrap">
         <div class="password-display" id="passwordDisplay">Click Generate</div>
         <div class="pw-actions">
-          <button class="btn-icon" id="copyPwBtn" title="Copy password">⎘</button>
-          <button class="btn-icon" id="refreshBtn" title="Regenerate">↻</button>
+          <button class="btn-icon" id="copyPwBtn" title="Copy password" aria-label="Copy password">⎘</button>
+          <button class="btn-icon" id="refreshBtn" title="Regenerate" aria-label="Regenerate">↻</button>
         </div>
       </div>
 
@@ -103,7 +103,7 @@
       <div class="option-row">
         <label class="field-label" for="pwCount">Generate</label>
         <div style="display:flex;align-items:center;gap:10px">
-          <input type="number" id="pwCount" class="input-field" value="1" min="1" max="50" style="width:70px" / inputmode="numeric">
+          <input type="number" id="pwCount" class="input-field" value="1" min="1" max="50" style="width:70px" inputmode="numeric" />
           <span style="font-size:0.85rem;color:var(--text-secondary)">password(s)</span>
         </div>
       </div>
@@ -122,7 +122,7 @@
       <!-- History -->
       <div id="historyPanel" class="output-panel" style="margin-top:8px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <label class="field-label" style="margin:0">Recent Passwords</label>
+          <label class="field-label" style="margin:0">Recent Passwords <span style="text-transform:none;font-weight:400">(this tab only, never uploaded)</span></label>
           <button class="btn-ghost" id="clearHistoryBtn" style="font-size:0.78rem;padding:4px 10px">Clear</button>
         </div>
         <div id="historyList" class="pw-list"></div>

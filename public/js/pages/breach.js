@@ -81,7 +81,7 @@ function initPage() {
     checkBtn.textContent = 'Checking…';
     checkBtn.disabled    = true;
     resultPanel.hidden   = false;
-    breachResult.innerHTML = 'Checking…';
+    breachResult.textContent = 'Checking…';
     breachDetail.textContent = '';
 
     try {
@@ -94,7 +94,10 @@ function initPage() {
         breachDetail.textContent = 'This password does not appear in the HaveIBeenPwned database. However, always use a unique, strong password.';
       }
     } catch (e) {
-      breachResult.innerHTML = `<span class="danger">Error: ${e.message}</span>`;
+      const err = document.createElement('span');
+      err.className = 'danger';
+      err.textContent = `Error: ${e.message}`;
+      breachResult.replaceChildren(err);
       breachDetail.textContent = 'Could not reach the HaveIBeenPwned API. Check your internet connection.';
     } finally {
       checkBtn.textContent = 'Check Password';

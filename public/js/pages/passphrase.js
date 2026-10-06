@@ -46,8 +46,8 @@ function initPage() {
   }
 
   async function copy() {
-    await copyToClipboard(display.textContent);
-    showToast('Passphrase copied!');
+    const ok = await copyToClipboard(display.textContent);
+    showToast(ok ? 'Passphrase copied!' : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
   }
 
   document.getElementById('genPhraseBtn').addEventListener('click', withLoading(document.getElementById('genPhraseBtn'), 'Generating…', gen));

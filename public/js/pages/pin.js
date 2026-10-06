@@ -13,11 +13,24 @@ onAuthChange(u => {
   if (u && !nav.querySelector('.pro-badge')) nav.appendChild(proBadge());
 });
 
+// Unbiased random digit: rejection-sample bytes >= 250 (250 = 25 * 10), so
+// every digit has probability exactly 1/10. A plain `byte % 10` favoured 0-5.
+function randomDigits(length) {
+  const out = [];
+  while (out.length < length) {
+    const bytes = crypto.getRandomValues(new Uint8Array(length * 2));
+    for (const b of bytes) {
+      if (b < 250) out.push(b % 10);
+      if (out.length === length) break;
+    }
+  }
+  return out;
+}
+
 function genPIN(length, avoidSeq, avoidRepeat) {
   let attempts = 0;
   while (attempts++ < 1000) {
-    const bytes  = crypto.getRandomValues(new Uint8Array(length));
-    const digits = Array.from(bytes).map(b => b % 10);
+    const digits = randomDigits(length);
     const pin    = digits.join('');
 
     if (avoidSeq) {
@@ -35,7 +48,7 @@ function genPIN(length, avoidSeq, avoidRepeat) {
     return pin;
   }
   // Fallback (no constraints met within limit)
-  return Array.from(crypto.getRandomValues(new Uint8Array(length))).map(b => b % 10).join('');
+  return randomDigits(length).join('');
 }
 
 const display     = document.getElementById('pinDisplay');
@@ -61,10 +74,12 @@ function gen() {
   pins.forEach(pin => {
     const item = document.createElement('div');
     item.className = 'pw-item pw-item--pin';
-    item.innerHTML = `<span>${pin}</span>`;
+    const span = document.createElement('span');
+    span.textContent = pin;
+    item.appendChild(span);
     item.addEventListener('click', async () => {
-      await copyToClipboard(pin);
-      showToast('PIN copied!');
+      const ok = await copyToClipboard(pin);
+      showToast(ok ? 'PIN copied!' : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
     });
     pinList.appendChild(item);
   });
@@ -74,13 +89,13 @@ document.getElementById('genPins').addEventListener('click', gen);
 document.getElementById('refreshPin').addEventListener('click', gen);
 
 document.getElementById('copyPin').addEventListener('click', async () => {
-  await copyToClipboard(display.textContent);
-  showToast('Copied!');
+  const ok = await copyToClipboard(display.textContent);
+  showToast(ok ? 'Copied!' : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
 });
 
 document.getElementById('copyAllPins').addEventListener('click', async () => {
-  await copyToClipboard(pins.join('\n'));
-  showToast(`${pins.length} PINs copied!`);
+  const ok = await copyToClipboard(pins.join('\n'));
+  showToast(ok ? `${pins.length} PINs copied!` : 'Copy failed — select and copy manually', ok ? 'success' : 'error');
 });
 
 gen();

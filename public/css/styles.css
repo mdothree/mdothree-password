@@ -316,7 +316,11 @@ body {
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 @media (max-width: 640px) {
-  .site-header { padding: 0 16px; }
+  .site-header { padding: 0 16px; gap: 12px; }
+  /* Six nav links don't fit a phone row: let the nav scroll sideways instead of overflowing the page. */
+  .tool-nav { flex: 1; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .tool-nav::-webkit-scrollbar { display: none; }
+  .tool-nav a { white-space: nowrap; padding: 5px 10px; }
   .tool-main { padding: 28px 16px 60px; }
   .checkbox-grid { grid-template-columns: 1fr; }
 }
