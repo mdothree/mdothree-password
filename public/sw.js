@@ -1,7 +1,7 @@
 // sw.js — Service Worker (generated — do not edit directly)
 // Cache-first for assets, network-first for HTML navigation.
 
-const CACHE_NAME = 'password-v2';
+const CACHE_NAME = 'password-v3';
 
 const PRECACHE_URLS = [
   '/',
@@ -10,7 +10,7 @@ const PRECACHE_URLS = [
   '/pin',
   '/breach',
   '/favicon.svg',
-  '/manifest.json',
+  '/site.webmanifest',
   '/css/styles.css',
   '/js/app.js'
 ];
