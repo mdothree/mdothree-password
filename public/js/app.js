@@ -27,7 +27,7 @@ onSubscriptionChange(status => {
 const authStatus = document.createElement('div');
 authStatus.style.cssText = 'position:fixed;bottom:60px;right:16px;font-size:0.72rem;color:var(--text-secondary);font-family:var(--font-mono);z-index:999';
 document.body.appendChild(authStatus);
-onAuthChange(user => { authStatus.textContent = user ? '● signed in' : '○ offline'; });
+onAuthChange(user => { authStatus.textContent = (user && !user.isAnonymous) ? '● signed in' : ''; }); // anon guests see no badge
 ensureAnonymousUser().then(() => loadAndRenderHistory());
 
 // ---- Elements ----
