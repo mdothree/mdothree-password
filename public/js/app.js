@@ -157,7 +157,7 @@ function makePwItem(pw, showDelete = false, docId = null) {
     del.dataset.id = docId;
     del.title = 'Delete';
     del.setAttribute('aria-label', 'Delete from history');
-    del.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:0.75rem;padding:2px 6px;margin-left:4px';
+    del.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:0.75rem;padding:2px 6px;margin-left:4px;min-width:24px;min-height:24px'; // A11Y-013
     del.textContent = '✕';
     del.addEventListener('click', async e => {
       e.stopPropagation();

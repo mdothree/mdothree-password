@@ -3,11 +3,11 @@
    ============================================================ */
 
 :root {
-  --emerald: #10B981;
-  --emerald-dark: #059669;
+  --emerald: #047857; /* A11Y-003: 5.5:1 on white as text and as a button fill (was #10B981 2.5:1) */
+  --emerald-dark: #065F46;
   --slate-900: #0F172A;
   --slate-800: #1E293B;
-  --slate-500: #64748B;
+  --slate-500: #475569; /* A11Y-003: muted text 6.9:1 on #F1F5F9 (was 4.34:1) */
   --slate-300: #CBD5E1;
   --slate-100: #F1F5F9;
   --white: #FFFFFF;
@@ -187,8 +187,8 @@ body {
 }
 .checkbox-item input[type="checkbox"] {
   accent-color: var(--emerald);
-  width: 15px;
-  height: 15px;
+  width: 24px; /* A11Y-013: was 15px */
+  height: 24px;
 }
 
 .field-label {
@@ -217,7 +217,7 @@ body {
   box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
 }
 
-.slider { width: 100%; accent-color: var(--emerald); cursor: pointer; }
+.slider { width: 100%; min-height: 24px; accent-color: var(--emerald); cursor: pointer; } /* A11Y-013: 24px-tall hit area (was 16px) */
 
 /* ---- Buttons ---- */
 .btn-primary {
@@ -372,3 +372,9 @@ nav.footer-legal a:focus-visible { color: var(--text-primary, #0F172A); text-dec
 /* C7B-PW-NOSETS-EMPTY inline message (#B91C1C on #fff = 6.5:1) */
 .field-error { margin-top: 8px; font-size: 0.82rem; color: #B91C1C; }
 .btn-primary:disabled, .btn-icon:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* A11Y-013 / MOBILE-TAPTARGETS-MDOTHREE-TOOLS: 44px-tall tap targets for the footer and phone tool nav */
+nav.footer-legal a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; }
+@media (max-width: 640px) {
+  .tool-nav a { display: inline-flex; align-items: center; min-height: 44px; }
+}
