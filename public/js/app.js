@@ -67,7 +67,24 @@ function getOpts() {
   };
 }
 
+// C7B-PW-NOSETS-EMPTY: at least one character set is required. With none
+// selected, Generate/Regenerate are disabled and an inline message explains why.
+const SET_IDS = ['useUpper', 'useLower', 'useDigits', 'useSymbols'];
+const charsetMsg = document.getElementById('charsetMsg');
+function hasCharset() {
+  return SET_IDS.some(id => document.getElementById(id)?.checked);
+}
+function syncCharsetState() {
+  const ok = hasCharset();
+  if (generateBtn) generateBtn.disabled = !ok;
+  if (refreshBtn) refreshBtn.disabled = !ok;
+  charsetMsg?.classList.toggle('hidden', ok);
+  return ok;
+}
+SET_IDS.forEach(id => document.getElementById(id)?.addEventListener('change', syncCharsetState));
+
 async function generate() {
+  if (!syncCharsetState()) return;
   const opts  = getOpts();
   const rawCount = Math.min(50, Math.max(1, parseInt(pwCountInput.value, 10) || 1));
   // Pro gate: bulk generation (>5 at once)
@@ -78,7 +95,8 @@ async function generate() {
     if (pwCountInput) pwCountInput.value = 5;
     showToast('Free plan generates up to 5 at once. Generated 5. Upgrade to Pro for up to 50.', 'info', 4500);
   }
-  lastPasswords = generatePasswords(opts, count);
+  lastPasswords = generatePasswords(opts, count).filter(Boolean);
+  if (!lastPasswords.length) { syncCharsetState(); return; }
 
   const primary = lastPasswords[0];
   display.textContent = primary;
@@ -105,7 +123,7 @@ function updateStrength(pw) {
 }
 
 async function loadAndRenderHistory() {
-  const items = await loadPasswordHistory(15);
+  const items = (await loadPasswordHistory(15)).filter(item => item && item.password); // skip empty rows
   historyList.innerHTML = '';
   if (!items.length) {
     historyList.innerHTML = '<div style="font-size:0.8rem;color:var(--text-secondary);padding:8px 0">No history yet.</div>';
