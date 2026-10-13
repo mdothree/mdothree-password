@@ -36,6 +36,7 @@ body {
   line-height: 1.6;
   min-height: 100vh;
 }
+button, input, select, textarea { font-family: inherit; }
 
 .site-header {
   display: flex;
