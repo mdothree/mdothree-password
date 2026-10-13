@@ -88,7 +88,7 @@ async function generate() {
     // Free plan: cap at 5 and say so, instead of silently resetting and generating nothing.
     count = 5;
     if (pwCountInput) pwCountInput.value = 5;
-    showToast('Basic plan generates up to 5 at once. Generated 5. Up to 50 is planned for Pro (coming soon).', 'info', 4500);
+    showToast('Without Pro: up to 5 at a time. Generated 5. Up to 50 is planned for Pro (coming soon).', 'info', 4500);
   }
   lastPasswords = generatePasswords(opts, count).filter(Boolean);
   if (!lastPasswords.length) { syncCharsetState(); return; }
