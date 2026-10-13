@@ -2,11 +2,11 @@
 import { initSubscription }                         from '../services/subscriptionService.js';
 import { withLoading, showToast as uiToast, showError } from '../utils/ui-helpers.js';
 import { proGate, lockElement, handleStripeReturn } from '../services/paywallUI.js';
-import { ensureAnonymousUser }                      from '../config/config.js';
+import { restoreSession }                      from '../config/config.js';
 
 initSubscription();
 handleStripeReturn();
-ensureAnonymousUser();
+restoreSession();
 
 (async () => {
   const allowed = await proGate('password.breach');

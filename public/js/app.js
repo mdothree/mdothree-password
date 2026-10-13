@@ -9,7 +9,7 @@ import {
   deletePasswordFromHistory,
   clearPasswordHistory,
 } from './services/passwordStorage.js';
-import { ensureAnonymousUser } from './config/config.js';
+import { restoreSession } from './config/config.js';
 import { initSubscription, onSubscriptionChange } from './services/subscriptionService.js';
 import { proGate, lockElement, openUpgradeModal, handleStripeReturn, proBadge } from './services/paywallUI.js';
 
@@ -23,7 +23,7 @@ onSubscriptionChange(status => {
   else if (!status.isPro && existing) existing.remove();
 });
 
-ensureAnonymousUser().then(() => loadAndRenderHistory());
+restoreSession().then(() => loadAndRenderHistory());
 
 // ---- Elements ----
 const display       = document.getElementById('passwordDisplay');
