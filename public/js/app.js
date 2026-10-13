@@ -9,25 +9,20 @@ import {
   deletePasswordFromHistory,
   clearPasswordHistory,
 } from './services/passwordStorage.js';
-import { onAuthChange, ensureAnonymousUser } from './config/config.js';
+import { ensureAnonymousUser } from './config/config.js';
 import { initSubscription, onSubscriptionChange } from './services/subscriptionService.js';
 import { proGate, lockElement, openUpgradeModal, handleStripeReturn, proBadge } from './services/paywallUI.js';
 
 initSubscription();
 handleStripeReturn();
 onSubscriptionChange(status => {
-  const nav = document.querySelector('.tool-nav');
+  const nav = document.querySelector('.mdo-actions');
   if (!nav) return;
   const existing = nav.querySelector('.pro-badge');
-  if (status.isPro && !existing) nav.appendChild(proBadge());
+  if (status.isPro && !existing) nav.insertBefore(proBadge(), nav.querySelector('[data-mdo-account]'));
   else if (!status.isPro && existing) existing.remove();
 });
 
-// Firebase auth status badge
-const authStatus = document.createElement('div');
-authStatus.style.cssText = 'position:fixed;bottom:60px;right:16px;font-size:0.72rem;color:var(--text-secondary);font-family:var(--font-mono);z-index:999';
-document.body.appendChild(authStatus);
-onAuthChange(user => { authStatus.textContent = (user && !user.isAnonymous) ? '● signed in' : ''; }); // anon guests see no badge
 ensureAnonymousUser().then(() => loadAndRenderHistory());
 
 // ---- Elements ----
@@ -155,9 +150,9 @@ function makePwItem(pw, showDelete = false, docId = null) {
     const del = document.createElement('button');
     del.className = 'del-btn';
     del.dataset.id = docId;
-    del.title = 'Delete';
+    del.title = 'Delete from history';
     del.setAttribute('aria-label', 'Delete from history');
-    del.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:0.75rem;padding:2px 6px;margin-left:4px;min-width:24px;min-height:24px'; // A11Y-013
+    del.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:0.75rem;padding:2px 6px;margin-left:4px;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center'; // A11Y-013 / visual gate: 44x44
     del.textContent = '✕';
     del.addEventListener('click', async e => {
       e.stopPropagation();

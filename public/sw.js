@@ -1,7 +1,7 @@
 // sw.js — Service Worker (generated — do not edit directly)
 // Cache-first for assets, network-first for HTML navigation.
 
-const CACHE_NAME = 'password-v9';
+const CACHE_NAME = 'password-v10';
 
 const PRECACHE_URLS = [
   '/',
@@ -12,7 +12,11 @@ const PRECACHE_URLS = [
   '/favicon.svg',
   '/site.webmanifest',
   '/css/styles.css',
-  '/js/app.js'
+  '/js/app.js',
+  '/css/site-chrome.css',
+  '/js/theme-init.js',
+  '/js/site-chrome.js',
+  '/js/auth-nav.js'
 ];
 
 self.addEventListener('install', event => {

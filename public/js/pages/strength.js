@@ -1,16 +1,18 @@
 // js/pages/strength.js — Password Strength Meter page logic
 import { analyzeStrength, LEVEL_LABELS } from '../services/strengthMeter.js';
 import { withLoading, showToast as uiToast, showError } from '../utils/ui-helpers.js';
-import { initSubscription }              from '../services/subscriptionService.js';
+import { initSubscription, onSubscriptionChange } from '../services/subscriptionService.js';
 import { proBadge, handleStripeReturn }  from '../services/paywallUI.js';
-import { onAuthChange }                  from '../config/config.js';
 
 initSubscription();
 handleStripeReturn();
-onAuthChange(u => {
-  const nav = document.querySelector('.tool-nav');
+// Pro badge only for a real Pro entitlement (an anonymous guest is not Pro).
+onSubscriptionChange(status => {
+  const nav = document.querySelector('.mdo-actions');
   if (!nav) return;
-  if (u && !nav.querySelector('.pro-badge')) nav.appendChild(proBadge());
+  const existing = nav.querySelector('.pro-badge');
+  if (status.isPro && !existing) nav.insertBefore(proBadge(), nav.querySelector('[data-mdo-account]'));
+  else if (!status.isPro && existing) existing.remove();
 });
 
 const testPw   = document.getElementById('testPw');
