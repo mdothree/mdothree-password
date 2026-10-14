@@ -6,7 +6,7 @@
     "dev": "node scripts/inject-config.cjs && npx serve public",
     "build": "node scripts/inject-config.cjs",
     "start": "npx serve public",
-    "test": "node --test --experimental-vm-modules tests/passwordGenerator.test.js"
+    "test": "node --test --experimental-vm-modules tests/passwordGenerator.test.js tests/shared-parity.test.mjs"
   },
   "devDependencies": {
     "serve": "^14.0.0"
